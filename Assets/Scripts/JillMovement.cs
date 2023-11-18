@@ -5,24 +5,26 @@ using UnityEngine;
 public class JillMovement : MonoBehaviour
 {
 
-    /* -------------------------------------------------------------------------- */
-    /*                       headers para inspector de Unity                      */
-    /* -------------------------------------------------------------------------- */
+    //* -------------------------------------------------------------------------- */
+    //*                       headers para inspector de Unity                      */
+    //* -------------------------------------------------------------------------- */
+
+    public GameManager gameManager;
 
     //^ ------------------------------- movimiento ------------------------------- */
     [Header("Movimiento")]
     public CharacterController controller;
-    public float speed = 10.0f;
-    public float turnSmoothTime = 0.1f;
-    private float turnSmoothVelocity;
-    public float jumpSpeed = 6.0f;
-
-    public Transform cam;
+    public float velocidadMovimiento = 5.0f;
+    public float gravedad = -9.81f;
     private Vector3 jumpForce = Vector3.zero;
+    public float jumpSpeed = 2.0f;
     public float coyoteTime = 0.2f;
-    private float coyoteCurrent = 0;
-    public float gravity = 10.0f;
+    private readonly float coyoteCurrent = 0;
+    public float alturaJill = 2f;
 
+    // ^ --------------------------------- Cámara --------------------------------- */
+    [Header("Cámara")]
+    public Transform camara;
 
     // ^ ------------------------------- animaciones ------------------------------ */
     [Header("Animaciones")]
@@ -40,96 +42,100 @@ public class JillMovement : MonoBehaviour
     {
         caminar();
         saltar();
+        fumar();
     }
 
     private void caminar()
     {
-        var H_axis = Input.GetAxis("Horizontal");
-        var V_axis = Input.GetAxis("Vertical");
-        var dir = new Vector3(H_axis, 0, V_axis).normalized;
 
-        if (dir.magnitude >= 0.1f)
+        //& -------------------------- Obtenemos los inputs -------------------------- */
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        Vector3 movimiento = Vector3.zero;
+        float velocidadAnimaciones = 0;
+
+        if (horizontal != 0 || vertical != 0)
         {
 
+            // Prendemos la animación de caminar
             animator.SetBool("caminar", true);
             animator.SetBool("idle", false);
 
-            var camForward = cam.transform.forward;
-            var camRight = cam.transform.right;
+            // Acá buscamos hacia donde está mirando la cámara
+            Vector3 adelanteCamara = camara.forward;
+            // Para que la cámar no mire al piso
+            adelanteCamara.y = 0;
+            adelanteCamara.Normalize();
+            // Hacemos lo mismo pero con el horizontal
+            Vector3 derechaCamara = camara.right;
+            derechaCamara.y = 0;
+            derechaCamara.Normalize();
 
-            camForward.y = 0;
-            camRight.y = 0;
+            // Movemos al personaje
+            Vector3 direccion = adelanteCamara * vertical + derechaCamara * horizontal;
+            velocidadAnimaciones = Mathf.Clamp01(direccion.magnitude);
+            direccion.Normalize();
+            movimiento = direccion * velocidadMovimiento * velocidadAnimaciones * Time.deltaTime;
 
-            camForward.Normalize();
-            camRight.Normalize();
+            // Rotamos al personaje en la dirección a la que avanzamos
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direccion), 0.1f);
 
-            var moveDir = (camForward * V_axis + camRight * H_axis).normalized;
-
-            if (moveDir != Vector3.zero)
-            {
-                // Rotate the character to the direction of movement
-                var targetAngle = (Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg) + cam.eulerAngles.y;
-                var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-                transform.rotation = Quaternion.Euler(0f, angle, 0f);
-                Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSmoothTime * Time.deltaTime);
-                var moveDir2 = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                controller.Move(moveDir2 * speed * Time.deltaTime);
-            }
         }
         else
         {
-            animator.SetBool("caminar", false);
+            // Prendemos la animación del idle
             animator.SetBool("idle", true);
+            animator.SetBool("caminar", false);
         }
+
+        // ! Aplicamos gravedad
+        movimiento.y += gravedad * Time.deltaTime;
+        // Se reinicia la gravedad en caso de que estemos en el suelo
+        if (controller.isGrounded && movimiento.y < 0)
+        {
+            movimiento.y = 0;
+        }
+
+
+        // * Finalmente nos movemos
+        controller.Move(movimiento);
     }
 
     private void saltar()
     {
-        bool wasGrounded = controller.isGrounded;
-
-        // Obtenemos el saltar
         var jump = Input.GetButtonDown("Jump");
-        if ((controller.isGrounded || coyoteCurrent <= coyoteTime) && jump)
+
+        if (jump && IsGrounded())
         {
-            jumpForce.y = jumpSpeed;
+            jumpForce.y += Mathf.Sqrt(jumpSpeed * -3.0f * gravedad);
+
             animator.SetTrigger("saltar");
         }
-        else
-        {
-            animator.ResetTrigger("saltar");
-        }
 
-        animator.SetBool("idle", controller.isGrounded);
-        coyoteCurrent = 0;
-
-        // Realizar el salto
-        if (!wasGrounded)
-        {
-            coyoteCurrent += Time.deltaTime;
-            jumpForce.y -= gravity * Time.deltaTime;
-        }
-
-        // Realizar el salto
-        if (wasGrounded && jump)
-        {
-            jumpForce.y = jumpSpeed;
-            animator.SetTrigger("saltar");
-        }
-        else if (wasGrounded)
-        {
-            // Asegurarse de que el trigger se resetee solo si estás en el suelo
-            animator.ResetTrigger("saltar");
-        }
-
-
-        if (controller.isGrounded && jumpForce.y < 0)
-        {
-            jumpForce.y = -2f;
-            coyoteCurrent = 0;
-        }
-
+        jumpForce.y += gravedad * Time.deltaTime;
         controller.Move(jumpForce * Time.deltaTime);
+    }
+
+    private bool IsGrounded()
+    {
+        RaycastHit hit;
+        alturaJill = 0.1f;
+        Vector3 dir = new Vector3(0, -1);
+
+        if (Physics.Raycast(transform.position, dir, out hit, alturaJill))
+        {
+            return hit.collider != null;
+        }
+        return false;
+    }
+
+    private void fumar() {
+        
+        var fumar = Input.GetButtonDown("Fumar");
+    
+        if (fumar) {
+            gameManager.perderVida();
+        }
     }
 
 }
