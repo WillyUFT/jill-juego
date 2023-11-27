@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class JillMovement : MonoBehaviour
 {
-
     //* -------------------------------------------------------------------------- */
     //*                       headers para inspector de Unity                      */
     //* -------------------------------------------------------------------------- */
@@ -42,12 +41,12 @@ public class JillMovement : MonoBehaviour
     {
         caminar();
         saltar();
+        pegar();
         fumar();
     }
 
     private void caminar()
     {
-
         //& -------------------------- Obtenemos los inputs -------------------------- */
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -56,7 +55,6 @@ public class JillMovement : MonoBehaviour
 
         if (horizontal != 0 || vertical != 0)
         {
-
             // Prendemos la animación de caminar
             animator.SetBool("caminar", true);
             animator.SetBool("idle", false);
@@ -78,8 +76,11 @@ public class JillMovement : MonoBehaviour
             movimiento = direccion * velocidadMovimiento * velocidadAnimaciones * Time.deltaTime;
 
             // Rotamos al personaje en la dirección a la que avanzamos
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direccion), 0.1f);
-
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.LookRotation(direccion),
+                0.1f
+            );
         }
         else
         {
@@ -96,7 +97,6 @@ public class JillMovement : MonoBehaviour
             movimiento.y = 0;
         }
 
-
         // * Finalmente nos movemos
         controller.Move(movimiento);
     }
@@ -107,13 +107,13 @@ public class JillMovement : MonoBehaviour
 
         if (jump && IsGrounded())
         {
-            jumpForce.y += Mathf.Sqrt(jumpSpeed * -3.0f * gravedad);
+            jumpForce.y = Mathf.Sqrt(jumpSpeed * -3.0f * gravedad);
 
             animator.SetTrigger("saltar");
+            Debug.Log("saltando ");
+            jumpForce.y += gravedad * Time.deltaTime;
+            controller.Move(jumpForce * Time.deltaTime);
         }
-
-        jumpForce.y += gravedad * Time.deltaTime;
-        controller.Move(jumpForce * Time.deltaTime);
     }
 
     private bool IsGrounded()
@@ -129,13 +129,24 @@ public class JillMovement : MonoBehaviour
         return false;
     }
 
-    private void fumar() {
-        
-        var fumar = Input.GetButtonDown("Fumar");
-    
-        if (fumar) {
-            gameManager.perderVida();
+    private void pegar()
+    {
+        var pegar = Input.GetButtonDown("Pegar");
+
+        if (pegar)
+        {
+            animator.SetTrigger("pegar");
         }
     }
 
+    private void fumar()
+    {
+        var fumar = Input.GetButtonDown("Fumar");
+
+        if (fumar)
+        {
+            gameManager.ganarVida();
+            animator.SetTrigger("fumar");
+        }
+    }
 }

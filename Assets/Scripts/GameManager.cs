@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public HUD hud;
 
     public void Start() {
-        vidaJill = 100;
+        vidaJill = 20;
     }
 
     public void sumarVinoColoColo()
