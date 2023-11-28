@@ -192,13 +192,13 @@ AnimatorStateMachine:
     m_Position: {x: 640, y: 480, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 170751186720380135}
-    m_Position: {x: -770, y: -30, z: 0}
+    m_Position: {x: -760, y: -20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7429926056179172380}
     m_Position: {x: -760, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7549693031255260383}
-    m_Position: {x: -240, y: 190, z: 0}
+    m_Position: {x: -270, y: 190, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -808,6 +808,18 @@ AnimatorController:
     m_Controller: {fileID: 0}
   - m_Name: fumar
     m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: isFumando
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: isPegando
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
