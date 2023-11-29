@@ -20,6 +20,7 @@ public class JillMovement : MonoBehaviour
     public float coyoteTime = 0.2f;
     public float alturaJill = 2f;
     public float tiempoEnElAire = 0;
+    public float empujeFuerza = 15f;
 
     // ^ --------------------------------- Combate -------------------------------- */
     private bool isPegando = false;
@@ -59,7 +60,7 @@ public class JillMovement : MonoBehaviour
         float velocidadAnimaciones = 0;
 
         // Manejando el movimiento
-        if ((horizontal != 0 || vertical != 0) && (isPegando || isFumando))
+        if (horizontal != 0 || vertical != 0)
         {
             // Acá buscamos hacia donde está mirando la cámara
             Vector3 adelanteCamara = camara.forward;
@@ -169,5 +170,21 @@ public class JillMovement : MonoBehaviour
     public void TerminaFumar()
     {
         isFumando = false;
+    }
+
+    //* ------------------ para cuando choquemos con una botella ----------------- */
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "botellaTrampa")
+        {
+            // Obtener la dirección del empuje
+            Vector3 pushDirection = collision.transform.position - transform.position;
+            pushDirection = pushDirection.normalized;
+
+            // Aplicar una fuerza al jugador
+            collision.gameObject
+                .GetComponent<Rigidbody>()
+                .AddForce(pushDirection * empujeFuerza, ForceMode.Impulse);
+        }
     }
 }

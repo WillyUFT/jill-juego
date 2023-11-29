@@ -1,0 +1,3 @@
+Hola profesor, mi nivel es bastante sencillo la verdad, únicamente consite en un pasillo con unos péndulos que hacen caer al jugador, al caer el nivel se reinicia, realmente está inspirado tal cual en la fortaleza de Sen de Dark Souls.
+
+Los colores del escenarios están basados en VA-11 Hall-A: Cyberpunk Bartender Action, un juego temática cyberpunk que transcurre dentro de un bar, de ahí los elementos como los cigarrillos y las botellas de alcohol.

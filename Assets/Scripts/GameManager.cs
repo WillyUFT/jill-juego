@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
 
     public HUD hud;
 
+    public event EventHandler MuerteJugador;
+
     public void Start()
     {
         vidaJill = 20;
@@ -40,10 +42,32 @@ public class GameManager : MonoBehaviour
 
     public void perderVida()
     {
-        vidaJill -= 20;
+        if (vidaJill - 20 <= 0)
+        {
+            vidaJill = 0;
+        }
+        else
+        {
+            vidaJill -= 20;
+        }
+
+        if (vidaJill <= 0)
+        {
+            MuerteJugador?.Invoke(this, EventArgs.Empty);
+        }
+
         hud.actualizarVida(vidaJill);
     }
 
+    // * -------------------- Para morir de golpe, oneshoteado -------------------- */
+    public void oneShot()
+    {
+        vidaJill = 0;
+        hud.actualizarVida(vidaJill);
+        MuerteJugador?.Invoke(this, EventArgs.Empty);
+    }
+
+    //* -------------------- Esta es la función para curarnos -------------------- */
     public bool ganarVida()
     {
         if (cigarroScore > 1)
