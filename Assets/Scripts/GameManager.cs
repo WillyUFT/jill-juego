@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        vidaJill = 40;
+        vidaJill = 100;
     }
 
     public void sumarVinoColoColo()
