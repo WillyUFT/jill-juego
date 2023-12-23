@@ -23,6 +23,12 @@ public class GameManager : MonoBehaviour
 
     public event EventHandler MuerteJugador;
 
+    [SerializeField]
+    private AudioClip morir;
+
+    [SerializeField]
+    private AudioClip dmg;
+
     public void Start()
     {
         vidaJill = 40;
@@ -44,10 +50,12 @@ public class GameManager : MonoBehaviour
     {
         if (vidaJill - 20 <= 0)
         {
+            Sonidos.Instance.EjecutarSonido(morir);
             vidaJill = 0;
         }
         else
         {
+            Sonidos.Instance.EjecutarSonido(dmg);
             vidaJill -= 20;
         }
 
@@ -63,6 +71,7 @@ public class GameManager : MonoBehaviour
     public void oneShot()
     {
         vidaJill = 0;
+        Sonidos.Instance.EjecutarSonido(morir);
         hud.actualizarVida(vidaJill);
         MuerteJugador?.Invoke(this, EventArgs.Empty);
     }

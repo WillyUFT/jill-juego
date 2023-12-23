@@ -40,6 +40,10 @@ public class JillMovement : MonoBehaviour
     [SerializeField]
     private float velocidadRebote;
 
+    [Header("Sonidos")]
+    [SerializeField]
+    private AudioClip salto;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -108,7 +112,7 @@ public class JillMovement : MonoBehaviour
             jumpForce.y = Mathf.Sqrt(jumpSpeed * -2.0f * gravedad);
             tiempoEnElAire = 0; // Reseteamos el contador cuando estamos saltamos
             animator.SetTrigger("saltar");
-            Debug.Log("Saltando");
+            Sonidos.Instance.EjecutarSonido(salto);
         }
 
         if (!IsGrounded())

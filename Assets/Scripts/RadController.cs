@@ -8,6 +8,9 @@ public class RadController : MonoBehaviour
     [SerializeField]
     private bool terrenoSinVacio = false;
 
+    [SerializeField]
+    private ParticleSystem particulas;
+
     [Header("Suelo")]
     [SerializeField]
     private float distanciaSuelo;
@@ -46,6 +49,10 @@ public class RadController : MonoBehaviour
     private readonly float tiempoParaGirarNuevamente = 0.5f;
     private float ultimoGiro;
 
+    [Header("Sonido")]
+    [SerializeField]
+    private AudioClip perro;
+
     private void Girar()
     {
         ultimoGiro = Time.time;
@@ -69,12 +76,16 @@ public class RadController : MonoBehaviour
             if (normalContacto.y <= -0.7)
             {
                 other.gameObject.GetComponent<JillMovement>().Rebote();
+                Instantiate(particulas, transform.position, Quaternion.identity);
+                Sonidos.Instance.EjecutarSonido(perro);
                 Destroy(gameObject);
             }
             else
             {
                 jill.RecibirDano();
                 other.gameObject.GetComponent<JillMovement>().Rebote();
+                Instantiate(particulas, transform.position, Quaternion.identity);
+                Sonidos.Instance.EjecutarSonido(perro);
                 Destroy(gameObject);
             }
         }
