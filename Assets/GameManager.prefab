@@ -513,7 +513,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8494712949260200303}
-  - component: {fileID: 7983664631544986636}
+  - component: {fileID: 2742095546023746343}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -536,7 +536,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3605007455589352682}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7983664631544986636
+--- !u!114 &2742095546023746343
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -548,7 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3c8c32945c7e84da32e0c95b0af5ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vidaJill: 20
+  vidaJill: 1000
   hud: {fileID: 3257186824845695927}
 --- !u!1 &2384749376433341511
 GameObject:
@@ -1580,7 +1580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 850a7fa203902d14481193c2acceca3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 7983664631544986636}
+  gameManager: {fileID: 0}
   vinoColoColoScore: {fileID: 3343769756482902779}
   cigarroScore: {fileID: 783596955942695010}
   vidaScreen: {fileID: 7495911593802801992}
@@ -1597,6 +1597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuGameOver: {fileID: 6071446438517329264}
+  gamema: {fileID: 0}
   imagenHappy: {fileID: 8336958396317825250}
   nuevaImagen: {fileID: 21300000, guid: 0a8d3cdccb45cef49993af93e53384d4, type: 3}
 --- !u!1 &6050673041670225489
@@ -2280,7 +2281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ecea19b7bb1f8548a80f6c1d8db33c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 7983664631544986636}
+  gameManager: {fileID: 0}
+  rb: {fileID: 0}
   controller: {fileID: 8426773043759968961}
   velocidadMovimiento: 5
   gravedad: -9.81
@@ -2291,6 +2293,7 @@ MonoBehaviour:
   empujeFuerza: 15
   camara: {fileID: 0}
   animator: {fileID: 904890911825456374}
+  velocidadRebote: 0
 --- !u!95 &904890911825456374
 Animator:
   serializedVersion: 5

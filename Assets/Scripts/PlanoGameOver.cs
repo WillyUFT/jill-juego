@@ -4,16 +4,7 @@ using UnityEngine;
 
 public class PlanoGameOver : MonoBehaviour
 {
-    public GameManager gameManager;
-
-    private void Start()
-    {
-        gameManager = GameObject.FindAnyObjectByType<GameManager>();
-        if (gameManager == null)
-        {
-            Debug.LogError("GameManager not found");
-        }
-    }
+    [SerializeField] private GameManager gameManager;
 
     private void OnTriggerEnter(Collider other)
     {

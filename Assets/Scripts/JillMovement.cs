@@ -9,6 +9,7 @@ public class JillMovement : MonoBehaviour
     //* -------------------------------------------------------------------------- */
 
     public GameManager gameManager;
+    public Rigidbody rb;
 
     //^ ------------------------------- movimiento ------------------------------- */
     [Header("Movimiento")]
@@ -34,11 +35,17 @@ public class JillMovement : MonoBehaviour
     [Header("Animaciones")]
     public Animator animator;
 
+    // ^ --------------------------------- Rebote --------------------------------- */
+    [Header("Rebote")]
+    [SerializeField]
+    private float velocidadRebote;
+
     // Start is called before the first frame update
     void Start()
     {
         // * Llenamos el animador con el objeto del unity
         animator = gameObject.GetComponent<Animator>();
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -167,6 +174,16 @@ public class JillMovement : MonoBehaviour
         }
     }
 
+    public void RecibirDano()
+    {
+        gameManager.perderVida();
+    }
+
+    public void RecibirDanoLetal() {
+        gameManager.oneShot();
+        Destroy(gameObject);
+    }
+
     public void TerminaFumar()
     {
         isFumando = false;
@@ -175,7 +192,7 @@ public class JillMovement : MonoBehaviour
     //* ------------------ para cuando choquemos con una botella ----------------- */
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "botellaTrampa")
+        if (collision.gameObject.tag == "enemigo")
         {
             // Obtener la dirección del empuje
             Vector3 pushDirection = collision.transform.position - transform.position;
@@ -186,5 +203,10 @@ public class JillMovement : MonoBehaviour
                 .GetComponent<Rigidbody>()
                 .AddForce(pushDirection * empujeFuerza, ForceMode.Impulse);
         }
+    }
+
+    public void Rebote()
+    {
+        jumpForce.y = velocidadRebote;
     }
 }

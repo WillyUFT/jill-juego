@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        vidaJill = 20;
+        vidaJill = 40;
     }
 
     public void sumarVinoColoColo()
@@ -70,9 +70,16 @@ public class GameManager : MonoBehaviour
     //* -------------------- Esta es la función para curarnos -------------------- */
     public bool ganarVida()
     {
-        if (cigarroScore > 1)
+        if (cigarroScore > 1 && vidaJill != 100)
         {
-            vidaJill += 40;
+            if (vidaJill + 40 >= 100)
+            {
+                vidaJill = 100;
+            }
+            else
+            {
+                vidaJill += 40;
+            }
             hud.actualizarVida(vidaJill);
             cigarroScore -= 1;
             hud.actualizarCigarroScore(cigarroScore);

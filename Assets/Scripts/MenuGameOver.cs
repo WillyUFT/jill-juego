@@ -9,21 +9,13 @@ public class MenuGameOver : MonoBehaviour
 {
     [SerializeField]
     private GameObject menuGameOver;
-    private GameManager gameManager;
+    [SerializeField] private GameManager gamema;
     public Image imagenHappy;
     public Sprite nuevaImagen;
 
     private void Start()
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        if (gameManager != null)
-        {
-            gameManager.MuerteJugador += ActivarMenuGameOver;
-        }
-        else
-        {
-            Debug.LogError("GameManager not found");
-        }
+        gamema.MuerteJugador += ActivarMenuGameOver;
     }
 
     private void ActivarMenuGameOver(object sender, EventArgs e)
@@ -42,5 +34,10 @@ public class MenuGameOver : MonoBehaviour
     {
         yield return new WaitForSeconds(2); // Espera 1 segundo
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void aa()
+    {
+        Debug.Log("jasjdajdj");
     }
 }

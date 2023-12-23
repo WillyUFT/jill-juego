@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Botellas
   - botellaTrampa
+  - patrulla
+  - enemigo
+  - portal
+  - terreno
   layers:
   - Default
   - TransparentFX
