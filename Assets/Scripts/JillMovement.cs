@@ -62,7 +62,8 @@ public class JillMovement : MonoBehaviour
 
     private void caminar()
     {
-        bool jump = Input.GetButtonDown("Jump");
+        // bool jump = Input.GetButtonDown("Jump");
+        bool jump = false;
 
         // Obtenemos los inputs para el movimiento y el salto
         float horizontal = Input.GetAxis("Horizontal");
@@ -183,7 +184,8 @@ public class JillMovement : MonoBehaviour
         gameManager.perderVida();
     }
 
-    public void RecibirDanoLetal() {
+    public void RecibirDanoLetal()
+    {
         gameManager.oneShot();
         Destroy(gameObject);
     }
